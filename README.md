@@ -1,4 +1,18 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CS Room Booking
+
+ระบบจองห้องสาขาวิทยาการคอมพิวเตอร์ สร้างด้วย Next.js และเชื่อมข้อมูลผ่าน Google Apps Script กับ Google Sheets
+
+## เริ่มใช้งาน
+
+```bash
+npm run dev
+```
+
+เปิด http://localhost:3000
+
+ตั้งค่า `APPS_SCRIPT_URL`, บัญชีผู้ดูแล และ `SESSION_SECRET` ใน `.env.local` ก่อนใช้งาน ค่า `APPS_SCRIPT_ADMIN_KEY` ต้องตรงกับ `ADMIN_KEY` ใน Script Properties ของ Apps Script
+
+ผู้จองใช้รหัสการจองร่วมกับรหัสนักศึกษาเพื่อดูสถานะหรือยกเลิกด้วยตนเอง หน้าแอดมินรองรับการค้นหา กรองรายการ ระบุเหตุผลเมื่อปฏิเสธ และบันทึกประวัติลงแท็บ `audit_log`
 
 ## Getting Started
 
