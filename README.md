@@ -12,7 +12,7 @@ npm run dev
 
 ตั้งค่า `APPS_SCRIPT_URL`, บัญชีผู้ดูแล และ `SESSION_SECRET` ใน `.env.local` ก่อนใช้งาน ค่า `APPS_SCRIPT_ADMIN_KEY` ต้องตรงกับ `ADMIN_KEY` ใน Script Properties ของ Apps Script
 
-ผู้จองใช้รหัสการจองร่วมกับรหัสนักศึกษาเพื่อดูสถานะหรือยกเลิกด้วยตนเอง หน้าแอดมินรองรับการค้นหา กรองรายการ ระบุเหตุผลเมื่อปฏิเสธ และบันทึกประวัติลงแท็บ `audit_log`
+ผู้จองสมัครบัญชี User และเข้าสู่ระบบ จากนั้นใช้รหัสการจองเพื่อดูสถานะหรือยกเลิกเฉพาะรายการของตนเอง หน้าแอดมินรองรับการค้นหา กรองรายการ ระบุเหตุผลเมื่อปฏิเสธ และบันทึกประวัติลงแท็บ `audit_log`
 
 ## Getting Started
 
@@ -48,3 +48,19 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## ระบบสมาชิก
+เปิด /login เพื่อสมัครหรือเข้าสู่ระบบ Admin จัดการห้อง บัญชี และประวัติได้ที่ /admin ต้องอัปเดต Apps Script ตาม apps-script/README.md ก่อนใช้งานรุ่นนี้
+
+ทดสอบ: node --test tests/apps-script.test.cjs
+
+
+## Room categories, booking profile, dashboard and LINE
+
+Room categories are defined in `src/lib/rooms.ts`. `/dashboard` requires login; administrators see all bookings and members see only their own. Summary hours include approved reservations only and are grouped by booking date. Legacy records are reported as unspecified, not inferred.
+
+Redeploy `apps-script/Code.gs` as a new version of the existing deployment before using the new booking fields. `getCapabilities` must return `bookingProfile: 1`; new bookings are blocked until the backend can persist requester_type and department. Columns are appended automatically without deleting existing data.
+
+For LINE group notifications, follow [LINE-SETUP.md](LINE-SETUP.md). Notifications are disabled until credentials are configured; sending is best-effort after a committed booking mutation.
+
+Checks: `npm run lint`, `npm run build`, `node --test tests/*.test.cjs`.

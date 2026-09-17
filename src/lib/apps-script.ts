@@ -12,7 +12,7 @@ export async function appsScriptGet(action:string, params:Record<string,string> 
   url.searchParams.set("action",action);
   if (action === "getBookings") url.searchParams.set("adminKey",process.env.APPS_SCRIPT_ADMIN_KEY || "");
   Object.entries(params).forEach(([key,value]) => value && url.searchParams.set(key,value));
-  const response = await fetch(url,{ cache:"no-store", redirect:"follow" });
+  const response = await fetch(url,{ cache:"no-store", redirect:"follow", signal:AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error("Apps Script ตอบกลับผิดพลาด");
   const result = await response.json();
   if (result.success !== true) throw new Error(result.message || "โหลดข้อมูลไม่สำเร็จ");
@@ -24,7 +24,7 @@ export async function cachedAppsScriptGet(action:string,params:Record<string,str
   url.searchParams.set("action",action);
   if (action === "getBookings") url.searchParams.set("adminKey",process.env.APPS_SCRIPT_ADMIN_KEY || "");
   Object.entries(params).forEach(([key,value])=>value&&url.searchParams.set(key,value));
-  const response = await fetch(url,{next:{revalidate:Math.max(1,Math.ceil(ttlMs/1000)),tags:[`apps-script-${action}`]},redirect:"follow"});
+  const response = await fetch(url,{next:{revalidate:Math.max(1,Math.ceil(ttlMs/1000)),tags:[`apps-script-${action}`]},redirect:"follow", signal:AbortSignal.timeout(20000)});
   if(!response.ok)throw new Error("Apps Script ตอบกลับผิดพลาด");
   const result = await response.json();
   if (result.success !== true) throw new Error(result.message || "โหลดข้อมูลไม่สำเร็จ");
@@ -36,7 +36,7 @@ export function invalidateAppsScriptCache(action:string) {
 }
 
 export async function appsScriptPost(payload:unknown) {
-  const response = await fetch(getUrl(),{ method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload), cache:"no-store", redirect:"follow" });
+  const response = await fetch(getUrl(),{ method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(payload), cache:"no-store", redirect:"follow", signal:AbortSignal.timeout(20000) });
   if (!response.ok) throw new Error("Apps Script ตอบกลับผิดพลาด");
   return response.json();
 }

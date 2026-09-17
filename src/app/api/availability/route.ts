@@ -1,3 +1,5 @@
+import {describeRoom} from "@/lib/rooms";
+import type {Room} from "@/lib/types";
 import type { Booking } from "@/lib/types";
 import { cachedAppsScriptGet } from "@/lib/apps-script";
 
@@ -9,7 +11,7 @@ export async function GET(request:Request) {
       cachedAppsScriptGet("getBookings",{room:"",booking_date:date},10000),
     ]);
     const visibleBookings = (bookingResult.data||[]).filter((item:Booking)=>["pending","approved"].includes(item.status)).map((item:Booking)=>({id:item.id,room:item.room,booking_date:item.booking_date,start_time:item.start_time,end_time:item.end_time,status:item.status}));
-    return Response.json({success:true,data:{rooms:roomResult.data||[],bookings:visibleBookings}});
+    return Response.json({success:true,data:{rooms:(roomResult.data||[]).map((room:Room)=>describeRoom(room)),bookings:visibleBookings}});
   } catch(error) {
     return Response.json({success:false,message:error instanceof Error?error.message:"โหลดข้อมูลไม่สำเร็จ"},{status:500});
   }

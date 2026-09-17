@@ -1,11 +1,5 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const links = [["/","หน้าหลัก"],["/booking","จองห้อง"],["/schedule","ตารางห้อง"],["/my-bookings","รายการของฉัน"],["/admin","ผู้ดูแลระบบ"]];
-
-export function Navigation() {
-  const pathname = usePathname();
-  const active = (href:string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
-  return <header className="site-header"><div className="shell nav-wrap"><Link href="/" className="brand"><span className="brand-mark">CS</span><span>ROOM BOOKING</span></Link><nav className="nav-links" aria-label="เมนูหลัก">{links.map(([href,label]) => <Link key={href} href={href} className={`nav-link ${active(href)?"active":""} ${href==="/admin"?"admin-link":""}`}>{label}</Link>)}</nav></div><nav className="mobile-nav" aria-label="เมนูมือถือ">{links.map(([href,label]) => <Link key={href} href={href} className={`nav-link ${active(href)?"active":""}`}>{label}</Link>)}</nav></header>;
-}
+import { useEffect, useState } from "react";
+export function Navigation() { const pathname = usePathname(); const [user, setUser] = useState<{ role: string; name: string } | null>(null); useEffect(() => { let active = true; fetch("/api/auth/session").then(r => r.json()).then(j => { if (active) setUser(j.data || null); }).catch(() => { if (active) setUser(null); }); return () => { active = false; }; }, [pathname]); const links = [["/", "หน้าหลัก"], ["/booking", "จองห้อง"], ["/schedule", "ตารางห้อง"], ...(user ? [["/dashboard", "สรุปการใช้งาน"], ["/my-bookings", "รายการของฉัน"]] : []), ...(user?.role === "admin" ? [["/admin", "จัดการระบบ"]] : []), ...(!user ? [["/login", "เข้าสู่ระบบ"]] : [])]; const menu = links.map(([href, label]) => <Link key={href} href={href} className={`nav-link ${pathname === href ? "active" : ""}`}>{label}</Link>); async function logout() { await fetch("/api/auth/logout", { method: "POST" }); window.location.assign(new URL("/", window.location.origin)); } return <header className="site-header"><div className="shell nav-wrap"><Link href="/" className="brand"><span className="brand-mark">CS</span>ROOM BOOKING</Link><nav className="nav-links" aria-label="เมนูหลัก">{menu}</nav>{user && <button className="button button-secondary button-small" onClick={logout}>ออกจากระบบ</button>}</div><nav className="mobile-nav" aria-label="เมนูมือถือ">{menu}</nav></header>; }

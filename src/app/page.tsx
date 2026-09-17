@@ -11,7 +11,7 @@ export default function Home() {
         <div className="hero-actions"><Link className="button button-primary" href="/booking">เริ่มจองห้อง</Link><Link className="button button-secondary" href="/schedule">ดูตารางการจอง</Link></div>
       </div>
       <div className="how-it-works" aria-label="ขั้นตอนการจอง">
-        <div><span>1</span><p><strong>เลือกห้อง</strong><small>มีทั้งหมด 8 ห้อง</small></p></div>
+        <div><span>1</span><p><strong>เลือกห้อง</strong><small>ประชุม · คอมพิวเตอร์ · เรียน</small></p></div>
         <div><span>2</span><p><strong>เลือกวันและเวลา</strong><small>ระบบตรวจเวลาซ้อนให้</small></p></div>
         <div><span>3</span><p><strong>รอผู้ดูแลอนุมัติ</strong><small>ติดตามสถานะได้ตลอด</small></p></div>
       </div>
@@ -23,7 +23,7 @@ export default function Home() {
     </section>
 
     <section className="home-help"><div className="shell help-grid">
-      <div><span className="help-icon">?</span><div><strong>เคยส่งคำขอแล้ว?</strong><p>ใช้รหัสการจองและรหัสนักศึกษาเพื่อตรวจสอบสถานะหรือยกเลิก</p></div></div>
+      <div><span className="help-icon">?</span><div><strong>เคยส่งคำขอแล้ว?</strong><p>ใช้รหัสการจองหลังเข้าสู่ระบบเพื่อตรวจสอบสถานะหรือยกเลิก</p></div></div>
       <Link className="button button-secondary" href="/my-bookings">ตรวจสอบรายการของฉัน</Link>
     </div></section>
   </main>;
