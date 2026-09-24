@@ -61,7 +61,7 @@ export function BookingForm({ defaultRoom = "", defaultDate = "" }: { defaultRoo
 
     <aside className="booking-summary">
       <p className="summary-label">สรุปการจอง</p><h2>{selectedRoom ? `${roomCategory(selectedRoom.room_number)} ${roomCode(selectedRoom.room_number)}` : "ยังไม่ได้เลือกห้อง"}</h2>
-      {selectedRoom && <p className="summary-capacity">ความจุตามเอกสาร: {roomCapacityLabel(selectedRoom.room_number)}</p>}<dl><div><dt>วันที่</dt><dd>{displayDate(form.booking_date)}</dd></div><div><dt>เวลา</dt><dd>{form.start_time && form.end_time ? `${form.start_time} – ${form.end_time} น.` : "ยังไม่ได้เลือก"}</dd></div><div><dt>ผู้จอง</dt><dd>{form.name || "ยังไม่ได้กรอก"}</dd></div><div><dt>ประเภทผู้จอง</dt><dd>{form.requester_type === "staff" ? "บุคลากร" : "นักศึกษา"}</dd></div><div><dt>สาขาวิชา / หน่วยงาน</dt><dd>{form.department || "ยังไม่ได้กรอก"}</dd></div></dl>
+      {selectedRoom && <p className="summary-capacity">รองรับ: {roomCapacityLabel(selectedRoom.room_number)}</p>}<dl><div><dt>วันที่</dt><dd>{displayDate(form.booking_date)}</dd></div><div><dt>เวลา</dt><dd>{form.start_time && form.end_time ? `${form.start_time} – ${form.end_time} น.` : "ยังไม่ได้เลือก"}</dd></div><div><dt>ผู้จอง</dt><dd>{form.name || "ยังไม่ได้กรอก"}</dd></div><div><dt>ประเภทผู้จอง</dt><dd>{form.requester_type === "staff" ? "บุคลากร" : "นักศึกษา"}</dd></div><div><dt>สาขาวิชา / หน่วยงาน</dt><dd>{form.department || "ยังไม่ได้กรอก"}</dd></div></dl>
       <div className="summary-note"><strong>หลังส่งคำขอ</strong><p>ระบบจะแสดงรหัสการจองสำหรับตรวจสอบสถานะหรือยกเลิกผ่านบัญชีที่เข้าสู่ระบบ</p></div>
     </aside>
   </div>;

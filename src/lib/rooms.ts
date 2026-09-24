@@ -9,7 +9,7 @@ const categories: Record<string, string> = {
 // Transcribed from the supplied room responsibility order, PDF pages 7–8.
 // Keep storage IDs unchanged: existing bookings use 704, etc.
 const documentRooms: Record<string, { capacity: number; name: string; page: number }> = {
-  "704": { capacity: 20, name: "ห้องประธานบัณฑิตศึกษา", page: 7 },
+  "704": { capacity: 8, name: "ห้องประธานบัณฑิตศึกษา", page: 7 },
   "706": { capacity: 40, name: "ห้องปฏิบัติการคอมพิวเตอร์", page: 7 },
   "707": { capacity: 40, name: "ห้องปฏิบัติการคอมพิวเตอร์", page: 7 },
   "708": { capacity: 30, name: "ห้องไมโครคอมพิวเตอร์", page: 7 },
@@ -22,7 +22,7 @@ function localNumber(number: string | number) { return String(number).trim().rep
 export function roomDetails(number: string | number) { return documentRooms[localNumber(number)]; }
 export function roomCode(number: string | number) { const local=localNumber(number); return documentRooms[local] ? `34-${local}` : String(number); }
 export function roomFloor(number: string | number) { return localNumber(number).slice(0,1); }
-export function roomCapacityLabel(number: string | number) { const details=roomDetails(number); return details ? `${details.capacity} ที่นั่ง` : "ยังไม่ระบุความจุ"; }
+export function roomCapacityLabel(number: string | number) { const details=roomDetails(number); return details ? `${details.capacity} คน` : "ยังไม่ระบุความจุ"; }
 export function roomCategory(number: string | number) { return categories[localNumber(number)] || "ห้องทั่วไป"; }
 export function roomDescription(number: string | number) {
   const category = roomCategory(number);

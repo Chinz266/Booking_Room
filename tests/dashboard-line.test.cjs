@@ -47,3 +47,13 @@ test('LINE webhook rejects forged signatures and accepts signed verify requests'
  const signature=crypto.createHmac('sha256',env.LINE_CHANNEL_SECRET).update(body).digest('base64');
  assert.equal((await api.POST(new Request('http://localhost',{method:'POST',body,headers:{'x-line-signature':signature}}))).status,200);
 });
+
+test('booking filters share backend cache URL and preserve room/date filtering',async()=>{
+ const urls=[];const api=load('src/lib/apps-script.ts',{'server-only':{},'next/cache':{revalidateTag:()=>{}}},{process:{env:{APPS_SCRIPT_URL:'https://example.test/exec',APPS_SCRIPT_ADMIN_KEY:'test'}},fetch:async url=>{urls.push(String(url));return Response.json({success:true,data:[{id:'a',room:'704',booking_date:'2026-09-25'},{id:'b',room:'706',booking_date:'2026-09-25'},{id:'c',room:'704',booking_date:'2026-09-26'}]});}});
+ const a=await api.cachedAppsScriptGet('getBookings',{room:'704',booking_date:'2026-09-25'});assert.equal(a.data.length,1);assert.equal(a.data[0].id,'a');await api.cachedAppsScriptGet('getBookings',{booking_date:'2026-09-26'});assert.equal(urls[0],urls[1]);assert.equal(new URL(urls[0]).searchParams.has('room'),false);
+});
+test('status change checks role once and never writes for a normal user',async()=>{
+ let calls=0,writes=0,user={role:'user',username:'user'};
+ const api=load('src/app/api/bookings/status/route.ts',{'@/lib/line':{queueBookingNotification:()=>{}},'@/lib/auth':{currentUser:async()=>{calls++;return user;}},'@/lib/apps-script':{appsScriptPost:async()=>{writes++;return {success:true,data:{id:'a'}};},invalidateAppsScriptCache:()=>{}}},{process:{env:{APPS_SCRIPT_ADMIN_KEY:'test'}}});
+ const request=()=>new Request('https://example.test/api/bookings/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'a',status:'approved'})});assert.equal((await api.POST(request())).status,401);assert.equal(writes,0);calls=0;user={role:'admin',username:'admin'};assert.equal((await api.POST(request())).status,200);assert.equal(calls,1);assert.equal(writes,1);
+});
