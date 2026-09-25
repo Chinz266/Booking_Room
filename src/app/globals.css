@@ -3,7 +3,7 @@
 :root {
     --ink: #382719;
     --muted: #756453;
-    --paper: #fffaf0;
+    --paper: #fff;
     --white: #fff;
     --teal: #b94708;
     --teal-dark: #913508;
@@ -47,7 +47,7 @@ textarea {
     position: sticky;
     top: 0;
     z-index: 40;
-    background: rgba(255, 250, 240, .92);
+    background: rgba(255, 255, 255, .92);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(16, 42, 43, .09);
 }
@@ -999,7 +999,7 @@ textarea {
 :root {
     --ink: #382719;
     --muted: #756453;
-    --paper: #fffaf0;
+    --paper: #fff;
     --teal: #b94708;
     --teal-dark: #913508;
     --line: #eadcca;
