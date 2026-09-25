@@ -38,3 +38,15 @@ test("Google schema migration preserves existing password accounts",()=>{
  assert.equal(f.post("accountGoogle",{sub:"new-google",email:"local@example.com"}).data,null);
  const old=f.post("accountLogin",{username:"localuser"}).data;assert.equal(old.id,"old");assert.equal(old.password_hash,"salt:hash");assert.equal(old.version,"v1");assert.ok(f.tables.users[0].includes("google_sub"));
 });
+
+test('short booking IDs skip collisions and retain legacy lookup',()=>{
+ const f=fixture();
+ assert.equal(f.c.createBookingId([{id:'BK00000001'}]),'BK00000002');
+ const created=f.post('createBooking',data);
+ assert.match(created.data.id,/^BK[0-9A-F]{8}$/);
+ assert.equal(f.post('getMyBooking',{id:created.data.id.toLowerCase(),user_id:'a',role:'user'}).success,true);
+ f.tables.bookings[1][0]='BK20260907123456ABCD';
+ assert.equal(f.post('getMyBooking',{id:'BK20260907123456ABCD',user_id:'a',role:'user'}).success,true);
+ f.c.Utilities.getUuid=()=> '00000001-0000-4000-8000-000000000000';
+ assert.throws(()=>f.c.createBookingId([{id:'BK00000001'}]),/สร้างรหัส/);
+});

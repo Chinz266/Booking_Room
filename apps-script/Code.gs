@@ -58,7 +58,7 @@ function createBooking(data) {
         booking.start_time < normalizeTime(existing.end_time) && booking.end_time > normalizeTime(existing.start_time);
     });
     if (hasConflict) return { success: false, code: "BOOKING_CONFLICT", message: "ห้องนี้มีการจองในช่วงเวลาดังกล่าวแล้ว" };
-    const id = createBookingId();
+    const id = createBookingId(bookings);
     const now = isoTimestamp();
     appendObjectRow(BOOKING_SHEET, {
       id: id, user_id: String(data.user_id), room: booking.room, booking_date: booking.booking_date, start_time: booking.start_time,
@@ -197,7 +197,15 @@ function readSheet(sheetName) {
 function getSpreadsheet() { return SpreadsheetApp.openById(SPREADSHEET_ID); }
 function normalizeDate(value) { if (!value) return ""; if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value)) return Utilities.formatDate(value, Session.getScriptTimeZone(), "yyyy-MM-dd"); return String(value).trim().slice(0, 10); }
 function normalizeTime(value) { if (!value) return ""; if (Object.prototype.toString.call(value) === "[object Date]" && !isNaN(value)) return Utilities.formatDate(value, Session.getScriptTimeZone(), "HH:mm"); const text = String(value).trim(); const match = text.match(/^(\d{1,2}):(\d{2})/); return match ? ("0" + match[1]).slice(-2) + ":" + match[2] : text; }
-function createBookingId() { return "BK" + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyyMMddHHmmss") + Utilities.getUuid().slice(0, 4).toUpperCase(); }
+function createBookingId(bookings) {
+  // Called under the booking write lock so concurrent requests cannot reuse an ID.
+  const used = new Set((bookings || []).map(function (booking) { return String(booking.id).toUpperCase(); }));
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const id = "BK" + Utilities.getUuid().replace(/-/g, "").slice(0, 8).toUpperCase();
+    if (!used.has(id)) return id;
+  }
+  throw new Error("สร้างรหัสการจองไม่สำเร็จ กรุณาลองใหม่");
+}
 function isoTimestamp() { return Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "yyyy-MM-dd HH:mm:ss"); }
 function enforceRateLimit(key, limit, seconds) { const cache = CacheService.getScriptCache(); const cacheKey = "rate:" + key; const count = Number(cache.get(cacheKey) || 0) + 1; cache.put(cacheKey, String(count), seconds); if (count > limit) throw new Error("ดำเนินการหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่"); }
 function verifyAdminKey(value) { const expected = PropertiesService.getScriptProperties().getProperty("ADMIN_KEY"); if (!expected || String(value || "") !== expected) throw new Error("ไม่มีสิทธิ์เข้าถึงข้อมูลการจอง"); }
