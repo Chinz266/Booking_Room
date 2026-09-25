@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-    --ink: #102a2b;
-    --muted: #617071;
-    --paper: #f7f5ef;
+    --ink: #382719;
+    --muted: #756453;
+    --paper: #fffaf0;
     --white: #fff;
-    --teal: #087f73;
-    --teal-dark: #075f58;
-    --line: #dce2de;
-    --orange: #f2a340;
+    --teal: #b94708;
+    --teal-dark: #913508;
+    --line: #eadcca;
+    --orange: #f7be32;
 }
 
 * {
@@ -47,7 +47,7 @@ textarea {
     position: sticky;
     top: 0;
     z-index: 40;
-    background: rgba(247, 245, 239, .92);
+    background: rgba(255, 250, 240, .92);
     backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(16, 42, 43, .09);
 }
@@ -96,7 +96,7 @@ textarea {
 .nav-link:hover,
 .nav-link.active {
     color: var(--teal-dark);
-    background: #e5efeb;
+    background: #fff0cb;
 }
 
 .admin-link {
@@ -178,7 +178,7 @@ textarea {
 .button-primary {
     background: var(--teal);
     color: #fff;
-    box-shadow: 0 10px 24px rgba(8, 127, 115, .2);
+    box-shadow: 0 10px 24px rgba(185, 71, 8, .2);
 }
 
 .button-primary:hover {
@@ -435,7 +435,7 @@ textarea {
 
 .room-card:hover {
     transform: translateY(-4px);
-    border-color: #9bc4ba;
+    border-color: #e8b36b;
     box-shadow: 0 16px 35px rgba(22, 56, 52, .08);
 }
 
@@ -543,7 +543,7 @@ textarea {
 .field select:focus,
 .field textarea:focus {
     border-color: var(--teal);
-    box-shadow: 0 0 0 3px rgba(8, 127, 115, .1);
+    box-shadow: 0 0 0 3px rgba(185, 71, 8, .1);
 }
 
 .field textarea {
@@ -997,13 +997,13 @@ textarea {
 
 /* Clear task-focused interface */
 :root {
-    --ink: #102d3a;
-    --muted: #60727c;
-    --paper: #f4f7f9;
-    --teal: #087f73;
-    --teal-dark: #05665d;
-    --line: #d9e2e7;
-    --blue-soft: #eaf3f6;
+    --ink: #382719;
+    --muted: #756453;
+    --paper: #fffaf0;
+    --teal: #b94708;
+    --teal-dark: #913508;
+    --line: #eadcca;
+    --blue-soft: #fff0cb;
 }
 
 body {
@@ -1013,7 +1013,7 @@ body {
 
 .site-header {
     background: rgba(255, 255, 255, .94);
-    border-bottom-color: #dfe7ea;
+    border-bottom-color: #eadcca;
 }
 
 .nav-wrap {
@@ -1021,7 +1021,7 @@ body {
 }
 
 .brand-mark {
-    background: #0d5365;
+    background: #ad4109;
 }
 
 .nav-link {
@@ -1031,7 +1031,7 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    background: #e4f1f0;
+    background: #fff0cb;
 }
 
 .button {
@@ -1069,7 +1069,7 @@ body {
 
 .how-it-works {
     padding: 10px 0 10px 30px;
-    border-left: 1px solid #cddbe0;
+    border-left: 1px solid #ecd5b5;
 }
 
 .how-it-works>div {
@@ -1087,7 +1087,7 @@ body {
     left: 20px;
     top: 51px;
     height: 18px;
-    border-left: 1px dashed #b8c8ce;
+    border-left: 1px dashed #dcc09a;
 }
 
 .how-it-works span {
@@ -1097,7 +1097,7 @@ body {
     height: 42px;
     border-radius: 50%;
     color: #fff;
-    background: #0d5365;
+    background: #ad4109;
     font-weight: 800;
 }
 
@@ -1180,7 +1180,7 @@ body {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    color: #0d5365;
+    color: #ad4109;
     background: var(--blue-soft);
     font-size: 20px;
     font-weight: 800;
@@ -1215,7 +1215,7 @@ body {
 }
 
 .room-card:hover {
-    border-color: #8cbcb8;
+    border-color: #e8b36b;
     box-shadow: 0 12px 26px rgba(20, 58, 73, .08);
 }
 
@@ -1231,7 +1231,7 @@ body {
     width: 39px;
     height: 39px;
     border-radius: 9px;
-    color: #0d5365;
+    color: #ad4109;
     background: var(--blue-soft);
     font-size: 13px;
     font-weight: 800;
@@ -1256,7 +1256,7 @@ body {
     margin-top: auto;
     min-height: 43px;
     color: var(--teal-dark);
-    background: #e6f2ef;
+    background: #fff0d6;
 }
 
 .room-button:hover {
@@ -1299,7 +1299,7 @@ body {
     height: 34px;
     border-radius: 50%;
     color: #fff;
-    background: #0d5365;
+    background: #ad4109;
     font-weight: 800;
 }
 
@@ -1347,13 +1347,13 @@ body {
     top: 92px;
     padding: 25px;
     color: #fff;
-    background: #123846;
+    background: #542a16;
     border-radius: 14px;
 }
 
 .summary-label {
     margin: 0 0 10px;
-    color: #a8c3ca;
+    color: #f1d4ac;
     font-size: 13px;
     font-weight: 700;
 }
@@ -1373,7 +1373,7 @@ body {
 }
 
 .booking-summary dt {
-    color: #a8c3ca;
+    color: #f1d4ac;
     font-size: 13px;
 }
 
@@ -1384,7 +1384,7 @@ body {
 
 .summary-note {
     padding: 16px;
-    color: #d8e6e9;
+    color: #fff0d6;
     background: rgba(255, 255, 255, .08);
     border-radius: 10px;
 }
@@ -1400,7 +1400,7 @@ body {
     gap: 14px;
     align-items: flex-start;
     padding: 19px;
-    color: #075f58;
+    color: #913508;
     background: #e3f3ee;
     border: 1px solid #b9ded4;
     border-radius: 12px;
@@ -1584,7 +1584,7 @@ body {
     padding: 0 11px;
     color: var(--ink);
     background: #fff;
-    border: 1px solid #bfccd2;
+    border: 1px solid #dbc5aa;
     border-radius: 8px;
 }
 
@@ -1893,7 +1893,7 @@ a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid #299b9b;
+    outline: 3px solid #bd520d;
     outline-offset: 3px;
 }
 
@@ -1914,10 +1914,10 @@ textarea:focus-visible {
     gap: 10px;
     min-height: 44px;
     padding: 9px 16px;
-    border: 1px solid #d0dfe1;
+    border: 1px solid #e5cfb3;
     border-radius: 12px;
     background: #fff;
-    color: #365663;
+    color: #65462d;
     cursor: pointer;
     font-weight: 700;
 }
@@ -1925,18 +1925,18 @@ textarea:focus-visible {
 .category-tabs button span {
     border-radius: 6px;
     padding: 1px 7px;
-    background: #edf3f5;
+    background: #fff0cb;
     font-size: 12px;
 }
 
 .category-tabs button.selected {
-    background: #123e4b;
+    background: #b94708;
     color: #fff;
-    border-color: #123e4b;
+    border-color: #b94708;
 }
 
 .category-tabs button.selected span {
-    background: #2b5965;
+    background: #913508;
     color: #fff;
 }
 
@@ -1964,10 +1964,10 @@ textarea:focus-visible {
 
 .room-selection-note {
     margin-top: 14px;
-    background: #edf7f5;
+    background: #fff5db;
     padding: 14px 18px;
     border-radius: 10px;
-    border-left: 3px solid #087f73;
+    border-left: 3px solid #b94708;
 }
 
 .room-selection-note p {
@@ -1998,20 +1998,20 @@ textarea:focus-visible {
     gap: 10px;
     min-height: 54px;
     padding: 12px 20px;
-    border: 1px solid #ccd9dc;
+    border: 1px solid #e5cfb3;
     border-radius: 10px;
     cursor: pointer;
 }
 
 .requester-options label.selected {
-    border-color: #087f73;
-    background: #eaf7f3;
-    color: #075f58;
-    box-shadow: inset 0 0 0 1px #087f73;
+    border-color: #b94708;
+    background: #fff0cb;
+    color: #913508;
+    box-shadow: inset 0 0 0 1px #b94708;
 }
 
 .requester-options input {
-    accent-color: #087f73;
+    accent-color: #b94708;
     width: 18px;
     height: 18px;
 }
@@ -2049,7 +2049,7 @@ textarea:focus-visible {
     border-radius: 16px;
     padding: 24px;
     background: #fff;
-    border-top: 4px solid #0e7c75;
+    border-top: 4px solid #c65a12;
 }
 
 .stat-card:nth-child(2) {
@@ -2288,3 +2288,10 @@ meter::-moz-meter-bar {
         font-size: 13px;
     }
 }
+/* Faculty orange and yellow accents, with semantic status colours retained. */
+.site-header { border-top: 4px solid #f7be32; }
+.room-category { color: #913508; }
+.room-card .button { background: #fff0cb; color: #913508; }
+.room-card .button:hover { background: #ffe09a; }
+.category-tabs button.selected span { background: #ffd263; color: #542a16; }
+.button-primary:hover { background: #913508; }
