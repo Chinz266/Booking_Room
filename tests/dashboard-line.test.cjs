@@ -57,3 +57,12 @@ test('status change checks role once and never writes for a normal user',async()
  const api=load('src/app/api/bookings/status/route.ts',{'@/lib/line':{queueBookingNotification:()=>{}},'@/lib/auth':{currentUser:async()=>{calls++;return user;}},'@/lib/apps-script':{appsScriptPost:async()=>{writes++;return {success:true,data:{id:'a'}};},invalidateAppsScriptCache:()=>{}}},{process:{env:{APPS_SCRIPT_ADMIN_KEY:'test'}}});
  const request=()=>new Request('https://example.test/api/bookings/status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:'a',status:'approved'})});assert.equal((await api.POST(request())).status,401);assert.equal(writes,0);calls=0;user={role:'admin',username:'admin'};assert.equal((await api.POST(request())).status,200);assert.equal(calls,1);assert.equal(writes,1);
 });
+
+test('dashboard accepts numeric departments returned by Google Sheets',()=>{
+ const result=summary.summarizeBookings([{...booking,department:123},{...booking,department:0},{...booking,department:null}],'2026-09');
+ assert.equal(result.counts.total,3);
+ assert.equal(result.hours,4.5);
+ assert.ok(result.departments.some(row=>row.name==='123'&&row.count===1));
+ assert.ok(result.departments.some(row=>row.name==='0'&&row.count===1));
+ assert.ok(result.departments.some(row=>row.name==='ไม่ระบุ (รายการเดิม)'&&row.count===1));
+});

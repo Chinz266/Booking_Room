@@ -12,7 +12,7 @@ export function summarizeBookings(bookings: Booking[], month: string) {
   for (const b of selected) {
     if (b.status === "pending" || b.status === "approved" || b.status === "rejected" || b.status === "cancelled") counts[b.status]++;
     requester[b.requester_type === "student" || b.requester_type === "staff" ? b.requester_type : "unspecified"]++;
-    const department = b.department?.trim() || "ไม่ระบุ (รายการเดิม)";
+    const department = String(b.department ?? "").trim() || "ไม่ระบุ (รายการเดิม)";
     departments.set(department, (departments.get(department) || 0) + 1);
     daily.set(b.booking_date, (daily.get(b.booking_date) || 0) + 1);
     const room = String(b.room);
