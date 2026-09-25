@@ -273,7 +273,7 @@ function roleAction(action,data){
  }finally{lock.releaseLock();}
 }
 
-// Keep the stored record and audit trail; omit deleted rows from normal lists.
+// Permanently remove the cancelled booking row; retain the separate audit log.
 function deleteBooking(data) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
@@ -287,9 +287,8 @@ function deleteBooking(data) {
     const row = values.findIndex(function (r, index) { return index > 0 && String(r[headers.indexOf("id")]) === String(booking.id); });
     if (row < 1) throw new Error("ไม่พบรายการจอง");
     const actor = String(data.actor || data.user_id);
-    sheet.getRange(row + 1, headers.indexOf("deleted_by") + 1).setValue(actor);
-    sheet.getRange(row + 1, headers.indexOf("deleted_at") + 1).setValue(isoTimestamp());
-    appendAudit(booking.id, "deleted", actor, "ลบรายการที่ยกเลิกแล้วออกจากรายการใช้งาน");
+    sheet.deleteRow(row + 1);
+    appendAudit(booking.id, "deleted", actor, "ลบแถวการจองที่ยกเลิกแล้วออกจากฐานข้อมูล");
     return {success:true, message:"ลบรายการแล้ว", data:{id:booking.id}};
   } finally { lock.releaseLock(); }
 }

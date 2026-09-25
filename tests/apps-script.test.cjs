@@ -2,7 +2,7 @@
 const {test}=require('node:test');const assert=require('node:assert/strict');const vm=require('node:vm');const fs=require('node:fs');
 function fixture(){
  const tables={room:[["id","room_number","room_name","status"],[1,"704","ห้อง 704","available"]],bookings:[["id","room","booking_date","start_time","end_time","name","student_id","purpose","status","user_id"]]};
- function sheet(name){return {getDataRange:()=>({getValues:()=>tables[name].map(r=>r.slice())}),getLastColumn:()=>tables[name][0].length,getRange:(r,c,n=1,m=1)=>({getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:m},(_,j)=>tables[name][r+i-1]?.[c+j-1]??"")),setValue:v=>{tables[name][r-1]??=[];tables[name][r-1][c-1]=v;}}),appendRow:r=>tables[name].push(r)};}
+ function sheet(name){return {getDataRange:()=>({getValues:()=>tables[name].map(r=>r.slice())}),getLastColumn:()=>tables[name][0].length,getRange:(r,c,n=1,m=1)=>({getValues:()=>Array.from({length:n},(_,i)=>Array.from({length:m},(_,j)=>tables[name][r+i-1]?.[c+j-1]??"")),setValue:v=>{tables[name][r-1]??=[];tables[name][r-1][c-1]=v;}}),deleteRow:r=>tables[name].splice(r-1,1),appendRow:r=>tables[name].push(r)};}
  const db={getSheetByName:n=>tables[n]?sheet(n):null,insertSheet:n=>{tables[n]=[];return sheet(n);}};
  let uid=0;const cache=new Map();
  const context={SpreadsheetApp:{openById:()=>db},LockService:{getScriptLock:()=>({waitLock(){},releaseLock(){}})},PropertiesService:{getScriptProperties:()=>({getProperty:()=>"secret"})},Utilities:{getUuid:()=>String(++uid).padStart(8,"0")+"-uuid",formatDate:(d,t,f)=>f==="yyyy-MM-dd HH:mm"?"2026-09-11 08:00":f==="yyyyMMddHHmmss"?"20260911080000":f==="yyyy-MM-dd"?"2026-09-11":"2026-09-11 08:00:00"},Session:{getScriptTimeZone:()=>"Asia/Bangkok"},CacheService:{getScriptCache:()=>({get:k=>cache.get(k),put:(k,v)=>cache.set(k,v)})},ContentService:{MimeType:{JSON:"json"},createTextOutput:t=>({setMimeType:()=>JSON.parse(t)})}};
@@ -60,10 +60,24 @@ test('only owners or admins can delete cancelled bookings while retaining audit'
  assert.equal(f.post('getMyBooking',{id,user_id:'a',role:'user'}).success,false);
  assert.equal(f.post('ownedBookings',{user_id:'a',role:'user'}).data.length,0);
  assert.equal(f.c.doGet({parameter:{action:'getBookings',adminKey:'secret'}}).data.length,0);
- assert.equal(f.tables.bookings.length,2);
+ assert.equal(f.tables.bookings.length,1);
  assert.equal(f.tables.audit_log.at(-1)[2],'deleted');
  assert.equal(f.post('deleteBooking',{id,user_id:'a',role:'user'}).success,false);
  const g=fixture();const other=g.post('createBooking',data).data.id;
  g.post('cancelOwnBooking',{id:other,user_id:'a',role:'user'});
  assert.equal(g.post('deleteBooking',{id:other,user_id:'admin',role:'admin'}).success,true);
+});
+
+
+test('physical deletion preserves headers and neighbouring bookings',()=>{
+ const f=fixture(); const a=f.post('createBooking',data).data.id;
+ const b=f.post('createBooking',{...data,start_time:'11:00',end_time:'12:00'}).data.id;
+ f.post('approveBooking',{id:b});
+ assert.equal(f.post('deleteBooking',{id:b,user_id:'admin',role:'admin'}).success,false);
+ f.post('cancelOwnBooking',{id:a,user_id:'a',role:'user'});
+ assert.equal(f.post('deleteBooking',{id:a,user_id:'a',role:'user'}).success,true);
+ assert.equal(f.tables.bookings.length,2);
+ assert.equal(f.tables.bookings[0][0],'id');
+ assert.equal(f.tables.bookings[1][0],b);
+ assert.equal(f.post('getMyBooking',{id:b,user_id:'a',role:'user'}).data.status,'approved');
 });
