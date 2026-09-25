@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-    --ink: #382719;
-    --muted: #756453;
+    --ink: #20252d;
+    --muted: #667085;
     --paper: #fff;
     --white: #fff;
-    --teal: #b94708;
-    --teal-dark: #913508;
-    --line: #eadcca;
-    --orange: #f7be32;
+    --teal: #c4490c;
+    --teal-dark: #a3370a;
+    --line: #e5e7eb;
+    --orange: #f5c842;
 }
 
 * {
@@ -96,7 +96,7 @@ textarea {
 .nav-link:hover,
 .nav-link.active {
     color: var(--teal-dark);
-    background: #fff0cb;
+    background: #fff3e8;
 }
 
 .admin-link {
@@ -435,7 +435,7 @@ textarea {
 
 .room-card:hover {
     transform: translateY(-4px);
-    border-color: #e8b36b;
+    border-color: #f2bc98;
     box-shadow: 0 16px 35px rgba(22, 56, 52, .08);
 }
 
@@ -997,13 +997,13 @@ textarea {
 
 /* Clear task-focused interface */
 :root {
-    --ink: #382719;
-    --muted: #756453;
+    --ink: #20252d;
+    --muted: #667085;
     --paper: #fff;
-    --teal: #b94708;
-    --teal-dark: #913508;
-    --line: #eadcca;
-    --blue-soft: #fff0cb;
+    --teal: #c4490c;
+    --teal-dark: #a3370a;
+    --line: #e5e7eb;
+    --blue-soft: #fff3e8;
 }
 
 body {
@@ -1013,7 +1013,7 @@ body {
 
 .site-header {
     background: rgba(255, 255, 255, .94);
-    border-bottom-color: #eadcca;
+    border-bottom-color: #e5e7eb;
 }
 
 .nav-wrap {
@@ -1021,7 +1021,7 @@ body {
 }
 
 .brand-mark {
-    background: #ad4109;
+    background: #c4490c;
 }
 
 .nav-link {
@@ -1031,7 +1031,7 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-    background: #fff0cb;
+    background: #fff3e8;
 }
 
 .button {
@@ -1069,7 +1069,7 @@ body {
 
 .how-it-works {
     padding: 10px 0 10px 30px;
-    border-left: 1px solid #ecd5b5;
+    border-left: 1px solid #e5e7eb;
 }
 
 .how-it-works>div {
@@ -1087,7 +1087,7 @@ body {
     left: 20px;
     top: 51px;
     height: 18px;
-    border-left: 1px dashed #dcc09a;
+    border-left: 1px dashed #d1d5db;
 }
 
 .how-it-works span {
@@ -1097,7 +1097,7 @@ body {
     height: 42px;
     border-radius: 50%;
     color: #fff;
-    background: #ad4109;
+    background: #c4490c;
     font-weight: 800;
 }
 
@@ -1180,7 +1180,7 @@ body {
     width: 44px;
     height: 44px;
     border-radius: 12px;
-    color: #ad4109;
+    color: #c4490c;
     background: var(--blue-soft);
     font-size: 20px;
     font-weight: 800;
@@ -1204,19 +1204,19 @@ body {
 }
 
 .room-grid {
-    gap: 14px;
+    gap: 20px;
 }
 
 .room-card {
     min-height: 230px;
     padding: 21px;
     border-radius: 13px;
-    box-shadow: 0 4px 14px rgba(20, 58, 73, .03);
+    box-shadow: none;
 }
 
 .room-card:hover {
-    border-color: #e8b36b;
-    box-shadow: 0 12px 26px rgba(20, 58, 73, .08);
+    border-color: #f2bc98;
+    box-shadow: 0 4px 12px rgba(16, 24, 40, .05);
 }
 
 .room-card-top {
@@ -1231,7 +1231,7 @@ body {
     width: 39px;
     height: 39px;
     border-radius: 9px;
-    color: #ad4109;
+    color: #c4490c;
     background: var(--blue-soft);
     font-size: 13px;
     font-weight: 800;
@@ -1256,7 +1256,7 @@ body {
     margin-top: auto;
     min-height: 43px;
     color: var(--teal-dark);
-    background: #fff0d6;
+    background: #fff3e8;
 }
 
 .room-button:hover {
@@ -1299,7 +1299,7 @@ body {
     height: 34px;
     border-radius: 50%;
     color: #fff;
-    background: #ad4109;
+    background: #c4490c;
     font-weight: 800;
 }
 
@@ -1347,7 +1347,7 @@ body {
     top: 92px;
     padding: 25px;
     color: #fff;
-    background: #542a16;
+    background: #30343b;
     border-radius: 14px;
 }
 
@@ -1384,7 +1384,7 @@ body {
 
 .summary-note {
     padding: 16px;
-    color: #fff0d6;
+    color: #fff3e8;
     background: rgba(255, 255, 255, .08);
     border-radius: 10px;
 }
@@ -1400,7 +1400,7 @@ body {
     gap: 14px;
     align-items: flex-start;
     padding: 19px;
-    color: #913508;
+    color: #a3370a;
     background: #e3f3ee;
     border: 1px solid #b9ded4;
     border-radius: 12px;
@@ -1584,7 +1584,7 @@ body {
     padding: 0 11px;
     color: var(--ink);
     background: #fff;
-    border: 1px solid #dbc5aa;
+    border: 1px solid #d1d5db;
     border-radius: 8px;
 }
 
@@ -1914,10 +1914,10 @@ textarea:focus-visible {
     gap: 10px;
     min-height: 44px;
     padding: 9px 16px;
-    border: 1px solid #e5cfb3;
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
     background: #fff;
-    color: #65462d;
+    color: #475467;
     cursor: pointer;
     font-weight: 700;
 }
@@ -1925,18 +1925,18 @@ textarea:focus-visible {
 .category-tabs button span {
     border-radius: 6px;
     padding: 1px 7px;
-    background: #fff0cb;
+    background: #fff3e8;
     font-size: 12px;
 }
 
 .category-tabs button.selected {
-    background: #b94708;
+    background: #c4490c;
     color: #fff;
-    border-color: #b94708;
+    border-color: #c4490c;
 }
 
 .category-tabs button.selected span {
-    background: #913508;
+    background: #a3370a;
     color: #fff;
 }
 
@@ -1967,7 +1967,7 @@ textarea:focus-visible {
     background: #fff5db;
     padding: 14px 18px;
     border-radius: 10px;
-    border-left: 3px solid #b94708;
+    border-left: 3px solid #c4490c;
 }
 
 .room-selection-note p {
@@ -1998,20 +1998,20 @@ textarea:focus-visible {
     gap: 10px;
     min-height: 54px;
     padding: 12px 20px;
-    border: 1px solid #e5cfb3;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
     cursor: pointer;
 }
 
 .requester-options label.selected {
-    border-color: #b94708;
-    background: #fff0cb;
-    color: #913508;
-    box-shadow: inset 0 0 0 1px #b94708;
+    border-color: #c4490c;
+    background: #fff3e8;
+    color: #a3370a;
+    box-shadow: inset 0 0 0 1px #c4490c;
 }
 
 .requester-options input {
-    accent-color: #b94708;
+    accent-color: #c4490c;
     width: 18px;
     height: 18px;
 }
@@ -2289,9 +2289,21 @@ meter::-moz-meter-bar {
     }
 }
 /* Faculty orange and yellow accents, with semantic status colours retained. */
-.site-header { border-top: 4px solid #f7be32; }
-.room-category { color: #913508; }
-.room-card .button { background: #fff0cb; color: #913508; }
-.room-card .button:hover { background: #ffe09a; }
-.category-tabs button.selected span { background: #ffd263; color: #542a16; }
-.button-primary:hover { background: #913508; }
+.site-header { border-top: 3px solid #f5c842; }
+.room-category { color: #a3370a; }
+.room-card .button { background: #fff3e8; color: #a3370a; }
+.room-card .button:hover { background: #ffe5cf; }
+.category-tabs button.selected span { background: #ffd263; color: #30343b; }
+.button-primary:hover { background: #a3370a; }
+
+/* Neutral surfaces keep the faculty colours focused on actions and accents. */
+.how-it-works span { background: #fff5cc; color: #785600; }
+.room-icon { background: #f3f4f6; color: #475467; }
+.room-category { color: #667085; }
+.room-card { border-color: #e5e7eb; }
+.nav-link { color: #475467; }
+.nav-link.active, .nav-link:hover { color: #a3370a; }
+.category-tabs button.selected { background: #fff3e8; border-color: #eeab7b; color: #a3370a; }
+.category-tabs button.selected span { background: #fff0b3; color: #785600; }
+.room-description, .room-floor, .booking-meta { color: #667085; }
+input, select, textarea { background-color: #fff; }
