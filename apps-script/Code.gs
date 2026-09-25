@@ -3,7 +3,7 @@ const ROOM_SHEET = "room";
 const BOOKING_SHEET = "bookings";
 const AUDIT_SHEET = "audit_log";
 const BLOCKING_STATUSES = ["pending", "approved"];
-const EXTRA_BOOKING_HEADERS = ["status_reason", "updated_at", "updated_by", "user_id", "requester_type", "department"];
+const EXTRA_BOOKING_HEADERS = ["status_reason", "updated_at", "updated_by", "user_id", "requester_type", "department", "deleted_at", "deleted_by"];
 
 function doGet(e) {
   try {
@@ -16,7 +16,7 @@ function doGet(e) {
       const room = String((e.parameter && e.parameter.room) || "").trim();
       const bookingDate = normalizeDate((e.parameter && e.parameter.booking_date) || "");
       const filtered = bookings.filter(function (booking) {
-        return (!room || String(booking.room) === room) && (!bookingDate || normalizeDate(booking.booking_date) === bookingDate);
+        return !booking.deleted_at && (!room || String(booking.room) === room) && (!bookingDate || normalizeDate(booking.booking_date) === bookingDate);
       });
       return jsonResponse({ success: true, data: filtered.map(publicBooking) });
     }
@@ -33,6 +33,7 @@ function doPost(e) {
     if (["accountGoogle","accountRegister","accountLogin","accountSession","accountList","accountUpdate","ownedBookings","roomList","roomSave","auditList","assignBookingOwner"].indexOf(action)!==-1) return jsonResponse({success:true,data:roleAction(action,data)});
     if (action === "createBooking") return jsonResponse(createBooking(data));
     if (action === "getMyBooking") return jsonResponse(getMyBooking(data));
+    if (action === "deleteBooking") return jsonResponse(deleteBooking(data));
     if (action === "cancelOwnBooking") return jsonResponse(cancelOwnBooking(data));
     if (["approveBooking", "rejectBooking", "cancelBooking"].indexOf(action) !== -1) {
       verifyAdminKey(body.adminKey);
@@ -127,7 +128,7 @@ function updateBookingStatusUnlocked(id, newStatus, reason, actor) {
 function findBookingForAccount(id,userId,role) {
  const bookingId=String(id||"").trim().toUpperCase();
  const booking=readSheet(BOOKING_SHEET).filter(function(b){return String(b.id).toUpperCase()===bookingId;})[0];
- if(!booking||!userId||(role!=="admin"&&String(booking.user_id||"")!==String(userId)))throw new Error("ไม่พบรายการหรือไม่มีสิทธิ์เข้าถึง");
+ if(!booking||booking.deleted_at||!userId||(role!=="admin"&&String(booking.user_id||"")!==String(userId)))throw new Error("ไม่พบรายการหรือไม่มีสิทธิ์เข้าถึง");
  return booking;
 }
 
@@ -220,7 +221,7 @@ function roleAction(action,data){
  if(action==="accountSession"){const u=accountFind(data.id);return u?cleanAccount(u):null;}
  if(action==="accountLogin"){accountsSheet();enforceRateLimit("login:"+String(data.username).toLowerCase(),15,600);const u=readSheet("users").filter(function(u){return String(u.username)===String(data.username).toLowerCase();})[0];return u?Object.assign(cleanAccount(u),{password_hash:String(u.password_hash)}):null;}
  if(action==="accountList"){accountsSheet();return readSheet("users").map(cleanAccount);}
- if(action==="ownedBookings")return readSheet(BOOKING_SHEET).filter(function(b){return data.role==="admin"||(data.user_id&&String(b.user_id||"")===String(data.user_id));}).map(publicBooking);
+ if(action==="ownedBookings")return readSheet(BOOKING_SHEET).filter(function(b){return !b.deleted_at && (data.role==="admin"||(data.user_id&&String(b.user_id||"")===String(data.user_id)));}).map(publicBooking);
  if(action==="roomList")return readSheet(ROOM_SHEET);
  if(action==="auditList")return getSpreadsheet().getSheetByName(AUDIT_SHEET)?readSheet(AUDIT_SHEET).slice(-200).reverse():[];
  const lock=LockService.getScriptLock();lock.waitLock(30000);
@@ -270,4 +271,25 @@ function roleAction(action,data){
  }
  throw new Error("Invalid action");
  }finally{lock.releaseLock();}
+}
+
+// Keep the stored record and audit trail; omit deleted rows from normal lists.
+function deleteBooking(data) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const booking = findBookingForAccount(data.id, data.user_id, data.role);
+    if (booking.status !== "cancelled") throw new Error("ลบได้เฉพาะรายการที่ยกเลิกแล้ว");
+    ensureBookingHeaders();
+    const sheet = getSpreadsheet().getSheetByName(BOOKING_SHEET);
+    const values = sheet.getDataRange().getValues();
+    const headers = values[0].map(String);
+    const row = values.findIndex(function (r, index) { return index > 0 && String(r[headers.indexOf("id")]) === String(booking.id); });
+    if (row < 1) throw new Error("ไม่พบรายการจอง");
+    const actor = String(data.actor || data.user_id);
+    sheet.getRange(row + 1, headers.indexOf("deleted_by") + 1).setValue(actor);
+    sheet.getRange(row + 1, headers.indexOf("deleted_at") + 1).setValue(isoTimestamp());
+    appendAudit(booking.id, "deleted", actor, "ลบรายการที่ยกเลิกแล้วออกจากรายการใช้งาน");
+    return {success:true, message:"ลบรายการแล้ว", data:{id:booking.id}};
+  } finally { lock.releaseLock(); }
 }

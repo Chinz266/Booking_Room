@@ -10,8 +10,11 @@ export async function POST(request: Request) {
     const user = await currentUser(); if (!user) return Response.json({ success: false, message: "กรุณาเข้าสู่ระบบ" }, { status: 401 });
     const { id, action = "lookup" } = await request.json();
     if (!id) return Response.json({ success: false, message: "กรุณากรอกรหัสการจอง" }, { status: 400 });
-    const scriptAction = action === "cancel" ? "cancelOwnBooking" : "getMyBooking";
+    if (!["lookup", "cancel", "delete"].includes(action)) return Response.json({ success: false, message: "คำสั่งไม่ถูกต้อง" }, { status: 400 });
+    const scriptAction = action === "delete" ? "deleteBooking" : action === "cancel" ? "cancelOwnBooking" : "getMyBooking";
     const result = await appsScriptPost({ action: scriptAction, adminKey: process.env.APPS_SCRIPT_ADMIN_KEY, data: { id: String(id).trim().toUpperCase(), user_id: user.id, role: user.role, actor: user.username } });
+    if (result.success && action === "delete") invalidateAppsScriptCache("getBookings");
+    if (!result.success && action === "delete" && result.message === "Invalid action") result.message = "ผู้ดูแลต้องอัปเดต Apps Script ก่อนใช้ปุ่มลบ";
     if (result.success && action === "cancel") { invalidateAppsScriptCache("getBookings"); queueBookingNotification(result.data, "cancelled"); }
     return Response.json(result, { status: result.success ? 200 : 400 });
   } catch (error) {

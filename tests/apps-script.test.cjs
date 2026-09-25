@@ -50,3 +50,20 @@ test('short booking IDs skip collisions and retain legacy lookup',()=>{
  f.c.Utilities.getUuid=()=> '00000001-0000-4000-8000-000000000000';
  assert.throws(()=>f.c.createBookingId([{id:'BK00000001'}]),/สร้างรหัส/);
 });
+
+test('only owners or admins can delete cancelled bookings while retaining audit',()=>{
+ const f=fixture();const id=f.post('createBooking',data).data.id;
+ assert.equal(f.post('deleteBooking',{id,user_id:'a',role:'user'}).success,false);
+ f.post('cancelOwnBooking',{id,user_id:'a',role:'user'});
+ assert.equal(f.post('deleteBooking',{id,user_id:'b',role:'user'}).success,false);
+ assert.equal(f.post('deleteBooking',{id,user_id:'a',role:'user'}).success,true);
+ assert.equal(f.post('getMyBooking',{id,user_id:'a',role:'user'}).success,false);
+ assert.equal(f.post('ownedBookings',{user_id:'a',role:'user'}).data.length,0);
+ assert.equal(f.c.doGet({parameter:{action:'getBookings',adminKey:'secret'}}).data.length,0);
+ assert.equal(f.tables.bookings.length,2);
+ assert.equal(f.tables.audit_log.at(-1)[2],'deleted');
+ assert.equal(f.post('deleteBooking',{id,user_id:'a',role:'user'}).success,false);
+ const g=fixture();const other=g.post('createBooking',data).data.id;
+ g.post('cancelOwnBooking',{id:other,user_id:'a',role:'user'});
+ assert.equal(g.post('deleteBooking',{id:other,user_id:'admin',role:'admin'}).success,true);
+});
